@@ -2,7 +2,10 @@ package me.itsglobally.circleSmp;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -33,7 +36,51 @@ public class daemon extends WebSocketClient {
             String cmd = json.has("cmd") ? json.get("cmd").getAsString() : "";
             if (cmd.isEmpty()) return;
             switch (cmd) {
+                case "ban" :
+                    UUID u1;
+                    if (json.has("player")) {
+                        try {
+                            u1 = UUID.fromString(json.get("player").getAsString());
+                        } catch (Exception e) {
+                            JsonObject obj1 = basic("1");
+                            obj1.addProperty("error", "notuuid");
+                            obj1.addProperty("code", "1");
+                            return;
+                        }
+                        OfflinePlayer p1 = Bukkit.getOfflinePlayer(u1);
+                        Bukkit.getBanList(BanList.Type.NAME).addBan(
+                                p1.getName(),
+                                "Banned",
+                                null, // null = no expiration
+                                null  // null = no source
+                        );
+                        JsonObject obj1 = basic();
+                        obj1.addProperty("player", u1.toString());
+                        obj1.addProperty("banned", p1.isBanned());
+                        send(gson.toJson(obj1));
+                    }
+                case "unban" :
+                    UUID u2;
+                    if (json.has("player")) {
+                        try {
+                            u2 = UUID.fromString(json.get("player").getAsString());
+                        } catch (Exception e) {
+                            JsonObject obj2 = basic("1");
+                            obj2.addProperty("error", "notuuid");
+                            obj2.addProperty("code", "1");
+                            return;
+                        }
+                        OfflinePlayer p2 = Bukkit.getOfflinePlayer(u2);
+                        Bukkit.getBanList(BanList.Type.NAME).pardon(
+                                p2.getName()
+                        );
+                        JsonObject obj2 = basic();
+                        obj2.addProperty("player", u2.toString());
+                        obj2.addProperty("banned", p2.isBanned());
+                        send(gson.toJson(obj2));
+                    }
                 default:
+                    return;
             }
         } catch (Exception e) {
             Bukkit.getLogger().info("Invalid JSON: " + message);
@@ -51,7 +98,12 @@ public class daemon extends WebSocketClient {
         }
         return obj;
     }
-
+    private static JsonObject basic() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("server", "smp");
+        obj.addProperty("code", "0");
+        return obj;
+    }
     @Override
     public void onClose(int code, String reason, boolean remote) {
         Bukkit.getLogger().warning("Connection closed: " + reason);
