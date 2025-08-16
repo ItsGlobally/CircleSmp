@@ -37,48 +37,25 @@ public class daemon extends WebSocketClient {
             if (cmd.isEmpty()) return;
             switch (cmd) {
                 case "ban" :
-                    UUID u1;
                     if (json.has("player")) {
-                        try {
-                            u1 = UUID.fromString(json.get("player").getAsString());
-                        } catch (Exception e) {
-                            JsonObject obj1 = basic("1");
-                            obj1.addProperty("error", "notuuid");
-                            obj1.addProperty("code", "1");
-                            return;
-                        }
-                        OfflinePlayer p1 = Bukkit.getOfflinePlayer(u1);
-                        Bukkit.getBanList(BanList.Type.NAME).addBan(
-                                p1.getName(),
-                                "Banned",
-                                null, // null = no expiration
-                                null  // null = no source
-                        );
-                        JsonObject obj1 = basic();
-                        obj1.addProperty("player", u1.toString());
-                        obj1.addProperty("banned", p1.isBanned());
-                        send(gson.toJson(obj1));
+                        Bukkit.getScheduler().runTask(data.getPlugin(), () -> {
+                            Bukkit.dispatchCommand(
+                                    Bukkit.getConsoleSender(),
+                                    "ban " + json.get("player").getAsString()
+                            );
+                        });
                     }
+                    break;
                 case "unban" :
-                    UUID u2;
                     if (json.has("player")) {
-                        try {
-                            u2 = UUID.fromString(json.get("player").getAsString());
-                        } catch (Exception e) {
-                            JsonObject obj2 = basic("1");
-                            obj2.addProperty("error", "notuuid");
-                            obj2.addProperty("code", "1");
-                            return;
-                        }
-                        OfflinePlayer p2 = Bukkit.getOfflinePlayer(u2);
-                        Bukkit.getBanList(BanList.Type.NAME).pardon(
-                                p2.getName()
-                        );
-                        JsonObject obj2 = basic();
-                        obj2.addProperty("player", u2.toString());
-                        obj2.addProperty("banned", p2.isBanned());
-                        send(gson.toJson(obj2));
+                        Bukkit.getScheduler().runTask(data.getPlugin(), () -> {
+                            Bukkit.dispatchCommand(
+                                    Bukkit.getConsoleSender(),
+                                    "pardon " + json.get("player").getAsString()
+                            );
+                        });
                     }
+                    break;
                 case "coins":
                     UUID u3;
                     if (json.has("player")) {
