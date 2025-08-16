@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -78,6 +78,23 @@ public class daemon extends WebSocketClient {
                         obj2.addProperty("player", u2.toString());
                         obj2.addProperty("banned", p2.isBanned());
                         send(gson.toJson(obj2));
+                    }
+                case "coins":
+                    UUID u3;
+                    if (json.has("player")) {
+                        try {
+                            u3 = UUID.fromString(json.get("player").getAsString());
+                        } catch (Exception e) {
+                            JsonObject obj3 = basic("1");
+                            obj3.addProperty("error", "notuuid");
+                            obj3.addProperty("code", "1");
+                            return;
+                        }
+                        OfflinePlayer p3 = Bukkit.getOfflinePlayer(u3);
+                        JsonObject obj3 = basic();
+                        obj3.addProperty("player", u3.toString());
+                        obj3.addProperty("coins", data.getCoins(p3.getUniqueId()));
+                        send(gson.toJson(obj3));
                     }
                 default:
                     return;

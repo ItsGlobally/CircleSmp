@@ -1,5 +1,7 @@
 package me.itsglobally.circleSmp;
 
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
@@ -7,9 +9,16 @@ import java.net.URI;
 
 public final class CircleSmp extends JavaPlugin {
 
+    private static Economy econ = null;
+
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        if (!setupEconomy()) {
+            getLogger().severe("Vault not found or no economy plugin present!");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         daemon wssrv;
         data.setPlugin(this);
         try {
@@ -18,10 +27,26 @@ public final class CircleSmp extends JavaPlugin {
         } catch (Exception e) {
             getServer().getPluginManager().disablePlugin(this);
         }
+        data.setInstance(this);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
+    public static Economy getEconomy() {
+        return econ;
     }
 }

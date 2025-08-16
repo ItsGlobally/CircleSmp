@@ -1,6 +1,9 @@
 package me.itsglobally.circleSmp;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -28,5 +31,19 @@ public class data {
 
     public static JavaPlugin getPlugin() {
         return plugin;
+    }
+    private static CircleSmp instance;
+
+    public static void setInstance(CircleSmp instance) {
+        data.instance = instance;
+    }
+
+    public static CircleSmp getInstance() {
+        return instance;
+    }
+
+    public static double getCoins(UUID u) {
+       OfflinePlayer p = Bukkit.getOfflinePlayer(u);
+       return CircleSmp.getEconomy().getBalance(p);
     }
 }

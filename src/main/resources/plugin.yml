@@ -2,3 +2,6 @@ name: CircleSmp
 version: '1.0-SNAPSHOT'
 main: me.itsglobally.circleSmp.CircleSmp
 api-version: '1.21'
+depend:
+  - Vault
+  - LiteEco
