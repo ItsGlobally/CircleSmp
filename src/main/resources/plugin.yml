@@ -5,3 +5,13 @@ api-version: '1.21'
 depend:
   - Vault
   - LiteEco
+commands:
+  tpa:
+    aliases:
+      - tpaccepot
+      - tpahere
+      - tpdeny
+      - tpblock
+      - tpyes
+      - tpno
+      - tpauto

@@ -3,7 +3,7 @@ package me.itsglobally.circleSmp;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import me.itsglobally.circleSmp.commands.*;
 import java.net.URI;
 
 
@@ -28,6 +28,8 @@ public final class CircleSmp extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
         data.setInstance(this);
+
+        getCommand("tpaCommand").setExecutor(new tpaCommand());
     }
 
     @Override
