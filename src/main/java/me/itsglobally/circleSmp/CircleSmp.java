@@ -1,5 +1,6 @@
 package me.itsglobally.circleSmp;
 
+import me.itsglobally.circleSmp.data.data;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;

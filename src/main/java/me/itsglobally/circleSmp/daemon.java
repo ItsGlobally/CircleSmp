@@ -2,7 +2,7 @@ package me.itsglobally.circleSmp;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.bukkit.BanList;
+import me.itsglobally.circleSmp.data.data;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
