@@ -5,6 +5,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import me.itsglobally.circleSmp.commands.*;
 import java.net.URI;
+import java.util.Objects;
 
 
 public final class CircleSmp extends JavaPlugin {
@@ -29,7 +30,7 @@ public final class CircleSmp extends JavaPlugin {
         }
         data.setInstance(this);
 
-        getCommand("tpaCommand").setExecutor(new tpaCommand());
+        Objects.requireNonNull(getCommand("tpaCommand")).setExecutor(new tpaCommand());
     }
 
     @Override

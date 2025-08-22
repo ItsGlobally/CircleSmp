@@ -10,8 +10,17 @@ public class utils {
         Component message = LegacyComponentSerializer.legacyAmpersand().deserialize(s);
         p.sendMessage(message);
     }
+    public static void sendComponent(Player p, Component s) {
+        p.sendMessage(s);
+    }
     public static void sendActionBar(Player p, String s) {
         Component message = LegacyComponentSerializer.legacyAmpersand().deserialize(s);
         p.sendActionBar(message);
+    }
+    public static void sendActionBarComponent(Player p, Component s) {
+        p.sendActionBar(s);
+    }
+    public static String convertLegacyColorCode(String s) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(s).content();
     }
 }
