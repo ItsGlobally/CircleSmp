@@ -30,13 +30,13 @@ public final class CircleSmp extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
         data.setInstance(this);
-
+        data.setup();
         Objects.requireNonNull(getCommand("tpaCommand")).setExecutor(new tpaCommand());
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        data.save();
     }
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {

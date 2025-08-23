@@ -12,6 +12,5 @@ commands:
       - tpahere
       - tpdeny
       - tpblock
-      - tpyes
-      - tpno
+      - tpallow
       - tpauto

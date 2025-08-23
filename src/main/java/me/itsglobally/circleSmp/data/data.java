@@ -4,11 +4,14 @@ import me.itsglobally.circleSmp.CircleSmp;
 import me.itsglobally.circleSmp.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class data {
@@ -130,5 +133,56 @@ public class data {
     }
     public static void remTpa(Player p, Player tg, Boolean ended, tpaType tT) {
         remTpa(p.getUniqueId(), tg.getUniqueId(), ended, tT);
+    }
+
+    private static File file;
+    private static FileConfiguration canTpa;
+
+    public static void setup() {
+        file = new File(getInstance().getDataFolder(), "canTpa.yml");
+
+        if (!file.exists()) {
+            try {
+                file.getParentFile().mkdirs();
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        canTpa = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public static FileConfiguration get() {
+        return canTpa;
+    }
+
+    public static void save() {
+        try {
+            canTpa.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void reload() {
+        canTpa = YamlConfiguration.loadConfiguration(file);
+    }
+
+    public static void setCanTpa(Player player, boolean value) {
+        UUID uuid = player.getUniqueId();
+        canTpa.set("players." + uuid + ".canTpa", value);
+    }
+    public static void setTpAuto(Player player, boolean value) {
+        UUID uuid = player.getUniqueId();
+        canTpa.set("players." + uuid + ".tpauto", value);
+    }
+    public static boolean getTpAuto(Player player) {
+        UUID uuid = player.getUniqueId();
+        return canTpa.getBoolean("players." + uuid + ".tpauto", true);
+    }
+    public static boolean canTpa(Player player) {
+        UUID uuid = player.getUniqueId();
+        return canTpa.getBoolean("players." + uuid + ".canTpa", true);
     }
 }
